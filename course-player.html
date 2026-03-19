@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Course Player - LearnVerse">
+  <title>Course Player — LearnVerse</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    body {
+      background: var(--bg-primary);
+      overflow-y: hidden;
+      /* App view, no full page scroll */
+    }
+
+    /* Player Layout */
+    .player-layout {
+      display: flex;
+      height: 100vh;
+      width: 100vw;
+    }
+
+    /* Main Content Area */
+    .player-main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      background: var(--bg-primary);
+    }
+
+    /* Top Navbar inside player */
+    .player-nav {
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 var(--space-6);
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--border-color);
+      flex-shrink: 0;
+    }
+
+    /* Video Container */
+    .video-container {
+      width: 100%;
+      background: #000;
+      aspect-ratio: 16 / 9;
+      position: relative;
+    }
+
+    .video-placeholder {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+    }
+
+    .play-btn-large {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: var(--primary-500);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      cursor: pointer;
+      transition: all var(--transition-base);
+    }
+
+    .play-btn-large:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 30px rgba(108, 26, 252, 0.6);
+    }
+
+    /* Content Metadata */
+    .lesson-meta {
+      padding: var(--space-8) var(--space-8);
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .lesson-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: var(--space-6);
+      padding-top: var(--space-6);
+      border-top: 1px solid var(--border-color);
+    }
+
+    /* Sidebar Curriculum */
+    .player-sidebar {
+      width: 350px;
+      background: var(--bg-card);
+      border-left: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+    }
+
+    @media (max-width: 900px) {
+      .player-layout {
+        flex-direction: column;
+      }
+
+      .player-sidebar {
+        width: 100%;
+        height: 400px;
+        border-left: none;
+        border-top: 1px solid var(--border-color);
+      }
+
+      body {
+        overflow-y: auto;
+      }
+    }
+
+    .sidebar-header {
+      padding: var(--space-4) var(--space-6);
+      border-bottom: 1px solid var(--border-color);
+      background: var(--bg-secondary);
+    }
+
+    .module-list {
+      flex: 1;
+      overflow-y: auto;
+    }
+
+    /* Module Items */
+    .module-group {
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .module-title {
+      padding: var(--space-3) var(--space-4);
+      background: var(--bg-primary);
+      font-weight: 600;
+      font-size: var(--fs-sm);
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .module-title:hover {
+      background: var(--bg-secondary);
+    }
+
+    .lesson-item {
+      padding: var(--space-3) var(--space-4) var(--space-3) var(--space-8);
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-3);
+      cursor: pointer;
+      transition: background var(--transition-fast);
+      font-size: var(--fs-sm);
+    }
+
+    .lesson-item:hover {
+      background: var(--bg-primary);
+    }
+
+    .lesson-item.active {
+      background: var(--primary-50);
+      border-left: 3px solid var(--primary-500);
+    }
+
+    [data-theme="dark"] .lesson-item.active {
+      background: rgba(108, 26, 252, 0.1);
+    }
+
+    .lesson-checkbox {
+      margin-top: 4px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="player-layout">
+
+    <!-- Main Content Area -->
+    <div class="player-main">
+
+      <!-- Top Nav -->
+      <header class="player-nav">
+        <a href="dashboard.html" class="btn btn-ghost" style="padding-left:0;">← Back to Dashboard</a>
+        <div style="font-weight:600; font-size:var(--fs-sm);" id="player-course-title">Loading Course...</div>
+        <button class="theme-toggle" id="theme-toggle-btn" onclick="Theme.toggle()">🌙</button>
+      </header>
+
+      <!-- Video Area -->
+      <div class="video-container">
+        <div class="video-placeholder">
+          <div class="play-btn-large">▶</div>
+          <p style="margin-top:var(--space-4); font-size:var(--fs-sm); color:rgba(255,255,255,0.7);">Video playback is
+            simulated in this demo.</p>
+        </div>
+      </div>
+
+      <!-- Lesson Metadata -->
+      <div class="lesson-meta">
+        <div
+          style="display:flex; gap:var(--space-2); align-items:center; margin-bottom:var(--space-2); color:var(--text-muted); font-size:var(--fs-sm);">
+          <span id="meta-module">Module 1</span> • <span id="meta-duration">15 min video</span>
+        </div>
+        <h1 style="font-size:var(--fs-3xl); margin-bottom:var(--space-4);" id="meta-title">1. Introduction to the Course
+        </h1>
+
+        <p style="color:var(--text-secondary); line-height:1.8;" id="meta-desc">
+          Welcome to the course! In this lesson, we will cover the foundational concepts and explain the project you
+          will be building throughout this curriculum. Grab a notebook, set up your development environment, and let's
+          get started.
+        </p>
+
+        <div class="lesson-actions">
+          <button class="btn btn-secondary">← Previous Lesson</button>
+          <button class="btn btn-primary" id="mark-complete-btn" onclick="toggleCurrentComplete()">Mark as
+            Complete</button>
+          <button class="btn btn-secondary">Next Lesson →</button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Sidebar Curriculum -->
+    <aside class="player-sidebar">
+      <div class="sidebar-header">
+        <h3 style="font-size:var(--fs-base); margin-bottom:var(--space-2);">Course Content</h3>
+
+        <!-- Progress Bar -->
+        <div
+          style="display:flex; justify-content:space-between; font-size:var(--fs-xs); margin-bottom:var(--space-1); color:var(--text-secondary);">
+          <span id="progress-text">0/0 Lessons Completed</span>
+          <strong id="progress-pct">0%</strong>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progress-fill" style="width: 0%;"></div>
+        </div>
+      </div>
+
+      <div class="module-list" id="curriculum-list">
+        <!-- Injected via JS -->
+      </div>
+    </aside>
+
+  </div>
+
+  <!-- Success Toast Container -->
+  <div id="toast-container" style="position: fixed; bottom: 20px; right: 20px; z-index: 1000;"></div>
+
+  <script src="js/script.js"></script>
+  <script>
+    let currentCourse = null;
+    let totalLessonsCount = 0;
+
+    // Demo state for tracking which lessons are checked
+    // Keys will be `${courseId}-m${modIdx}-l${locIdx}`
+    let completedLessons = {};
+
+    document.addEventListener("DOMContentLoaded", () => {
+      Theme.init();
+
+      const user = Auth.getCurrentUser();
+      if (!user) {
+        window.location.href = "login.html";
+        return;
+      }
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const courseId = parseInt(urlParams.get('id'));
+
+      currentCourse = COURSES.find(c => c.id === courseId);
+
+      if (!currentCourse) {
+        document.getElementById("player-course-title").textContent = "Course Not Found";
+        return;
+      }
+
+      // Check if user is enrolled
+      if (!Auth.isEnrolled(courseId)) {
+        UI.showToast("You are not enrolled in this course.", "error");
+        setTimeout(() => window.location.href = "dashboard.html", 2000);
+        return;
+      }
+
+      document.getElementById("player-course-title").textContent = currentCourse.title;
+
+      // Load progress from LS (mock localized to this course for demo)
+      const savedProgress = localStorage.getItem(`ocp_progress_${courseId}`);
+      if (savedProgress) {
+        completedLessons = JSON.parse(savedProgress);
+      }
+
+      renderCurriculum();
+      updateProgressUI();
+    });
+
+    function renderCurriculum() {
+      const list = document.getElementById("curriculum-list");
+      let html = "";
+      totalLessonsCount = 0;
+
+      currentCourse.modules.forEach((mod, mIdx) => {
+        // Expand first module by default
+        const icon = mIdx === 0 ? "▼" : "▶";
+
+        html += `
+          <div class="module-group">
+            <div class="module-title" onclick="toggleModule(${mIdx})">
+              <span>Section ${mIdx + 1}: ${mod.title}</span>
+              <span id="icon-m${mIdx}">${icon}</span>
+            </div>
+            <div class="module-lessons" id="lessons-m${mIdx}" style="display: ${mIdx === 0 ? 'block' : 'none'};">
+        `;
+
+        // Generate mock lessons based on mod.lessons count
+        for (let i = 0; i < mod.lessons; i++) {
+          totalLessonsCount++;
+          const lessonKey = `m${mIdx}-l${i}`;
+          const isComplete = completedLessons[lessonKey];
+
+          // First lesson of first module is active by default in this demo
+          const isActive = (mIdx === 0 && i === 0) ? "active" : "";
+
+          html += `
+            <div class="lesson-item ${isActive}" onclick="loadLesson(${mIdx}, ${i}, '${lessonKey}', '${mod.title}')">
+              <input type="checkbox" class="lesson-checkbox" ${isComplete ? 'checked' : ''} onclick="toggleCheck(event, '${lessonKey}')">
+              <div>
+                <div style="font-weight: 500;">${i + 1}. Lesson Topic Placeholder</div>
+                <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 2px;">▶ 5:30</div>
+              </div>
+            </div>
+          `;
+        }
+
+        html += `</div></div>`;
+      });
+
+      list.innerHTML = html;
+    }
+
+    function toggleModule(idx) {
+      const lessonsDiv = document.getElementById(`lessons-m${idx}`);
+      const icon = document.getElementById(`icon-m${idx}`);
+      if (lessonsDiv.style.display === "none") {
+        lessonsDiv.style.display = "block";
+        icon.textContent = "▼";
+      } else {
+        lessonsDiv.style.display = "none";
+        icon.textContent = "▶";
+      }
+    }
+
+    let activeLessonKey = "m0-l0";
+
+    function loadLesson(mIdx, lIdx, key, modTitle) {
+      // Remove active class from old
+      document.querySelectorAll(".lesson-item").forEach(el => el.classList.remove("active"));
+      // Add active class to new (hacky selector via DOM tree walking is avoided here for brevity, assuming standard click targets)
+      event.currentTarget.classList.add("active");
+
+      activeLessonKey = key;
+
+      // Update Meta
+      document.getElementById("meta-module").textContent = `Section ${mIdx + 1}: ${modTitle}`;
+      document.getElementById("meta-title").textContent = `${lIdx + 1}. Lesson Topic Placeholder`;
+
+      updateCompleteButtonState();
+    }
+
+    function toggleCheck(event, key) {
+      event.stopPropagation(); // Prevent triggering loadLesson
+      completedLessons[key] = event.target.checked;
+      saveProgress();
+      updateProgressUI();
+      updateCompleteButtonState();
+    }
+
+    function toggleCurrentComplete() {
+      completedLessons[activeLessonKey] = !completedLessons[activeLessonKey];
+
+      // Update checkbox manually
+      const cb = document.querySelector(`.lesson-item.active .lesson-checkbox`);
+      if (cb) cb.checked = completedLessons[activeLessonKey];
+
+      saveProgress();
+      updateProgressUI();
+      updateCompleteButtonState();
+    }
+
+    function updateCompleteButtonState() {
+      const btn = document.getElementById("mark-complete-btn");
+      if (completedLessons[activeLessonKey]) {
+        btn.textContent = "Completed ✔";
+        btn.style.background = "var(--success)";
+        btn.style.borderColor = "var(--success)";
+      } else {
+        btn.textContent = "Mark as Complete";
+        btn.style.background = "var(--gradient-primary)";
+        btn.style.borderColor = "transparent";
+      }
+    }
+
+    function saveProgress() {
+      if (!currentCourse) return;
+      localStorage.setItem(`ocp_progress_${currentCourse.id}`, JSON.stringify(completedLessons));
+
+      // Update user array with a generic percentage
+      const completedCount = Object.values(completedLessons).filter(v => v).length;
+      const pct = Math.round((completedCount / totalLessonsCount) * 100) || 0;
+
+      const user = Auth.getCurrentUser();
+      const enrollment = user.enrolledCourses.find(e => e.courseId === currentCourse.id);
+      if (enrollment) {
+        enrollment.progress = pct;
+        Auth.updateUser(user);
+      }
+    }
+
+    function updateProgressUI() {
+      const completedCount = Object.values(completedLessons).filter(v => v).length;
+      const pct = Math.round((completedCount / (totalLessonsCount || 1)) * 100);
+
+      document.getElementById("progress-text").textContent = `${completedCount}/${totalLessonsCount} Lessons Completed`;
+      document.getElementById("progress-pct").textContent = `${pct}%`;
+      document.getElementById("progress-fill").style.width = `${pct}%`;
+    }
+
+  </script>
+</body>
+
+</html>

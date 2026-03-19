@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Instructor Profile - LearnVerse">
+  <title>Instructor Profile — LearnVerse</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo"><span>🎓</span> LearnVerse</a>
+      <div class="nav-links" id="nav-links">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="courses.html" class="nav-link">Courses</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+      </div>
+      <div class="nav-actions">
+        <button class="theme-toggle" id="theme-toggle-btn" onclick="Theme.toggle()" aria-label="Toggle dark mode">🌙</button>
+        <div id="nav-auth-btns">
+          <a href="login.html" class="btn btn-ghost">Login</a>
+          <a href="signup.html" class="btn btn-primary btn-sm">Sign Up</a>
+        </div>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Instructor Hero Section -->
+  <section class="section" style="padding-top: calc(var(--nav-height) + var(--space-12)); background: var(--bg-secondary);">
+    <div class="container">
+      <div class="instructor-profile-card card" style="display: flex; gap: var(--space-8); padding: var(--space-8); align-items: flex-start; flex-wrap: wrap;">
+        
+        <div class="instructor-avatar" style="width: 200px; height: 200px; border-radius: var(--radius-xl); background: var(--gradient-primary); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 5rem; font-weight: 800; flex-shrink: 0;">
+          SJ
+        </div>
+
+        <div class="instructor-info" style="flex: 1; min-width: 300px;">
+          <h1 style="font-size: var(--fs-4xl); margin-bottom: var(--space-2);">Sarah Johnson</h1>
+          <p style="font-size: var(--fs-lg); color: var(--primary-500); font-weight: 500; margin-bottom: var(--space-4);">Senior Full Stack Developer & Educator</p>
+          
+          <div class="instructor-stats" style="display: flex; gap: var(--space-6); margin-bottom: var(--space-6); padding-bottom: var(--space-6); border-bottom: 1px solid var(--border-color);">
+            <div>
+              <div style="font-size: var(--fs-xl); font-weight: 700; color: var(--text-primary);">125,430</div>
+              <div style="font-size: var(--fs-sm); color: var(--text-muted);">Total Students</div>
+            </div>
+            <div>
+              <div style="font-size: var(--fs-xl); font-weight: 700; color: var(--text-primary);">15</div>
+              <div style="font-size: var(--fs-sm); color: var(--text-muted);">Courses</div>
+            </div>
+            <div>
+              <div style="font-size: var(--fs-xl); font-weight: 700; color: var(--warning); display: flex; align-items: center; gap: var(--space-1);">4.9 ⭐</div>
+              <div style="font-size: var(--fs-sm); color: var(--text-muted);">Instructor Rating</div>
+            </div>
+          </div>
+
+          <div class="instructor-bio" style="margin-bottom: var(--space-6);">
+            <h3 style="margin-bottom: var(--space-3);">About Me</h3>
+            <p style="color: var(--text-secondary); line-height: 1.8;">
+              Hi, I'm Sarah! I've been a software engineer for over a decade, working at top tech companies before discovering my passion for teaching. I specialize in making complex web development concepts easy to understand. My goal is to help you build the skills you need to land your dream job in tech. When I'm not coding, I enjoy hiking and mentoring aspiring developers.
+            </p>
+          </div>
+
+          <div class="instructor-actions" style="display: flex; gap: var(--space-4); align-items: center;">
+            <a href="#" class="btn btn-primary">Contact Instructor</a>
+            <div class="social-links" style="display: flex; gap: var(--space-3); margin-left: auto;">
+              <a href="#" class="btn btn-secondary btn-sm" aria-label="YouTube">▶ YouTube</a>
+              <a href="#" class="btn btn-secondary btn-sm" aria-label="Twitter">𝕏 Twitter</a>
+              <a href="#" class="btn btn-secondary btn-sm" aria-label="LinkedIn">in LinkedIn</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Instructor Courses -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header" style="text-align: left; margin-bottom: var(--space-8);">
+        <h2>Courses by Sarah Johnson</h2>
+        <p>Explore the comprehensive curriculum taught by Sarah.</p>
+      </div>
+      <div class="grid grid-3" id="instructor-courses">
+        <!-- Courses will be dynamically injected here via JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <span>© 2026 LearnVerse. All rights reserved.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/script.js"></script>
+  <script>
+    // Initialize Auth state
+    Auth.updateNav();
+    
+    // Render courses for this specific instructor
+    window.addEventListener('DOMContentLoaded', () => {
+      // Find courses by "Sarah Johnson"
+      const instructorCourses = COURSES.filter(c => c.instructor === "Sarah Johnson");
+      const coursesContainer = document.getElementById("instructor-courses");
+      
+      if(instructorCourses.length > 0) {
+        coursesContainer.innerHTML = instructorCourses.map(c => UI.renderCourseCard(c)).join("");
+      } else {
+        coursesContainer.innerHTML = "<p>No courses found for this instructor yet.</p>";
+      }
+    });
+  </script>
+</body>
+</html>

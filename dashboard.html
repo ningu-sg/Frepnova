@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Your LearnVerse dashboard — manage enrolled courses and track progress.">
+  <title>Dashboard — LearnVerse</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo"><span>🎓</span> LearnVerse</a>
+      <div class="nav-links" id="nav-links">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="courses.html" class="nav-link">Courses</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+      </div>
+      <div class="nav-actions">
+        <button class="theme-toggle" id="theme-toggle-btn" onclick="Theme.toggle()" aria-label="Toggle dark mode">🌙</button>
+        <div id="nav-auth-btns"></div>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="dashboard-page">
+    <div class="container">
+      <!-- Dashboard Header -->
+      <div class="dashboard-header">
+        <div class="dashboard-welcome">
+          <h1 id="dash-greeting">Welcome back!</h1>
+          <p>Here's an overview of your learning progress</p>
+        </div>
+        <button onclick="Auth.logout()" class="btn btn-secondary">Logout</button>
+      </div>
+
+      <!-- Stats -->
+      <div class="dashboard-stats">
+        <div class="dash-stat-card">
+          <div class="dash-stat-icon">📚</div>
+          <div class="dash-stat-number" id="dash-enrolled-count">0</div>
+          <div class="dash-stat-label">Courses Enrolled</div>
+        </div>
+        <div class="dash-stat-card">
+          <div class="dash-stat-icon">⏱</div>
+          <div class="dash-stat-number" id="dash-hours">0</div>
+          <div class="dash-stat-label">Hours of Learning</div>
+        </div>
+        <div class="dash-stat-card">
+          <div class="dash-stat-icon">🏆</div>
+          <div class="dash-stat-number" id="dash-certs">0</div>
+          <div class="dash-stat-label">Certificates Earned</div>
+        </div>
+      </div>
+
+      <!-- Profile Card -->
+      <div style="display:grid;grid-template-columns:320px 1fr;gap:var(--space-8);align-items:start">
+        <div>
+          <div class="glass-card" style="padding:var(--space-8);text-align:center">
+            <div class="testimonial-avatar" style="width:80px;height:80px;font-size:var(--fs-3xl);margin:0 auto var(--space-4)" id="dash-avatar"></div>
+            <h3 id="dash-name" style="margin-bottom:var(--space-1)"></h3>
+            <p id="dash-email" style="color:var(--text-muted);font-size:var(--fs-sm);margin-bottom:var(--space-4)"></p>
+            <p id="dash-joined" style="color:var(--text-muted);font-size:var(--fs-xs)"></p>
+          </div>
+          <div style="margin-top:var(--space-6)">
+            <a href="courses.html" class="btn btn-primary btn-lg" style="width:100%">Browse More Courses</a>
+          </div>
+        </div>
+
+        <!-- Enrolled Courses -->
+        <div>
+          <h2 style="margin-bottom:var(--space-6)">My Courses</h2>
+          <div id="enrolled-courses" class="grid" style="gap:var(--space-4)"></div>
+          <div id="no-enrolled" style="display:none">
+            <div class="no-results" style="padding:var(--space-10) 0">
+              <div class="no-results-icon">📭</div>
+              <h3>No courses enrolled yet</h3>
+              <p style="margin-bottom:var(--space-6)">Start your learning journey by exploring our courses</p>
+              <a href="courses.html" class="btn btn-primary">Explore Courses →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer" style="margin-top:var(--space-16)">
+    <div class="container">
+      <div class="footer-bottom" style="border-top:none;padding-top:0">
+        <span>© 2026 LearnVerse. All rights reserved.</span>
+        <div class="footer-social">
+          <a href="#">𝕏</a><a href="#">in</a><a href="#">⌨</a><a href="#">▶</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/script.js"></script>
+  <script>
+    // Auth guard
+    const user = Auth.getCurrentUser();
+    if (!user) { window.location.href = "login.html"; }
+
+    if (user) {
+      // Profile
+      document.getElementById("dash-greeting").textContent = `Welcome back, ${user.name.split(" ")[0]}! 👋`;
+      document.getElementById("dash-avatar").textContent = user.name[0].toUpperCase();
+      document.getElementById("dash-name").textContent = user.name;
+      document.getElementById("dash-email").textContent = user.email;
+      document.getElementById("dash-joined").textContent = `Joined ${new Date(user.joined).toLocaleDateString("en-US", { month: "long", year: "numeric" })}`;
+
+      // Stats
+      const enrolled = user.enrolledCourses || [];
+      document.getElementById("dash-enrolled-count").textContent = enrolled.length;
+
+      let totalHours = 0;
+      enrolled.forEach(e => {
+        const course = COURSES.find(c => c.id === e.courseId);
+        if (course) totalHours += parseInt(course.duration);
+      });
+      document.getElementById("dash-hours").textContent = totalHours;
+      document.getElementById("dash-certs").textContent = enrolled.filter(e => e.progress >= 100).length;
+
+      // Enrolled courses list
+      if (enrolled.length === 0) {
+        document.getElementById("no-enrolled").style.display = "block";
+      } else {
+        const isDark = document.documentElement.getAttribute("data-theme") === "dark";
+        document.getElementById("enrolled-courses").innerHTML = enrolled.map(e => {
+          const course = COURSES.find(c => c.id === e.courseId);
+          if (!course) return "";
+          const catColor = CATEGORY_COLORS[course.category] || {};
+          // Fetch actual progress from JS state/LocalStorage
+          const savedProgress = localStorage.getItem(`ocp_progress_${course.id}`);
+          let progress = e.progress || 0;
+          if (savedProgress) {
+            const completedLessons = JSON.parse(savedProgress);
+            const completedCount = Object.values(completedLessons).filter(Boolean).length;
+            // Approximate total based on course.modules if available, else static total
+            let total = 0;
+            if (course.modules) {
+               course.modules.forEach(m => { total += m.lessons; });
+            } else {
+               total = 10;
+            }
+            if(total > 0) {
+                progress = Math.round((completedCount / total) * 100);
+            }
+          }
+
+          return `
+            <div class="enrolled-card" onclick="window.location.href='course-player.html?id=${course.id}'" style="cursor:pointer">
+              <div class="enrolled-img-placeholder" style="background:${bgColor}">${course.emoji}</div>
+              <div class="enrolled-info">
+                <div class="enrolled-title">${course.title}</div>
+                <p style="font-size:var(--fs-sm);color:var(--text-muted);margin-bottom:var(--space-2)">by ${course.instructor}</p>
+                <div class="progress-bar"><div class="progress-fill" style="width:${progress}%"></div></div>
+                <div class="progress-text">${progress}% complete</div>
+              </div>
+            </div>
+          `;
+        }).join("");
+      }
+    }
+  </script>
+</body>
+</html>

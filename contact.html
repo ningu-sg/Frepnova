@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Get in touch with LearnVerse — we'd love to hear from you.">
+  <title>Contact Us — LearnVerse</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo"><span>🎓</span> LearnVerse</a>
+      <div class="nav-links" id="nav-links">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="courses.html" class="nav-link">Courses</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+      </div>
+      <div class="nav-actions">
+        <button class="theme-toggle" id="theme-toggle-btn" onclick="Theme.toggle()" aria-label="Toggle dark mode">🌙</button>
+        <div id="nav-auth-btns"></div>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="container">
+      <h1>Contact Us</h1>
+      <p>Have a question or feedback? We'd love to hear from you</p>
+    </div>
+  </div>
+
+  <!-- Contact Section -->
+  <section class="section">
+    <div class="container">
+      <div class="contact-grid">
+        <!-- Contact Info -->
+        <div>
+          <h2 style="margin-bottom:var(--space-6)">Get In Touch</h2>
+          <p style="color:var(--text-secondary);line-height:1.8;margin-bottom:var(--space-8)">Whether you have a question about courses, pricing, or anything else, our team is ready to answer all your questions.</p>
+
+          <div class="contact-info-card">
+            <div class="contact-info-icon">📧</div>
+            <div>
+              <div class="contact-info-label">Email Us</div>
+              <div class="contact-info-value">support@learnverse.com</div>
+            </div>
+          </div>
+
+          <div class="contact-info-card">
+            <div class="contact-info-icon">📞</div>
+            <div>
+              <div class="contact-info-label">Call Us</div>
+              <div class="contact-info-value">+91 98765 43210</div>
+            </div>
+          </div>
+
+          <div class="contact-info-card">
+            <div class="contact-info-icon">📍</div>
+            <div>
+              <div class="contact-info-label">Visit Us</div>
+              <div class="contact-info-value">Bengaluru, Karnataka, India</div>
+            </div>
+          </div>
+
+          <div class="contact-info-card">
+            <div class="contact-info-icon">🕐</div>
+            <div>
+              <div class="contact-info-label">Working Hours</div>
+              <div class="contact-info-value">Mon - Fri: 9AM - 6PM IST</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Contact Form -->
+        <div class="contact-form-card">
+          <h2 style="margin-bottom:var(--space-6)">Send a Message</h2>
+
+          <form id="contact-form" onsubmit="return handleContact(event)">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-4)">
+              <div class="form-group">
+                <label class="form-label" for="contact-name">Your Name</label>
+                <input class="form-input" type="text" id="contact-name" placeholder="John Doe" required>
+                <p class="form-error">Name is required</p>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="contact-email">Your Email</label>
+                <input class="form-input" type="email" id="contact-email" placeholder="you@example.com" required>
+                <p class="form-error">Valid email is required</p>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="contact-subject">Subject</label>
+              <input class="form-input" type="text" id="contact-subject" placeholder="How can we help you?" required>
+              <p class="form-error">Subject is required</p>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="contact-message">Message</label>
+              <textarea class="form-input" id="contact-message" rows="5" placeholder="Write your message here..." required></textarea>
+              <p class="form-error">Message is required</p>
+            </div>
+            <button type="submit" class="btn btn-primary btn-lg" style="width:100%">Send Message →</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Map Placeholder -->
+      <div style="margin-top:var(--space-12);border-radius:var(--radius-lg);overflow:hidden;border:1px solid var(--border-color)">
+        <div style="width:100%;height:300px;background:var(--bg-card);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:var(--space-3)">
+          <span style="font-size:4rem">🗺️</span>
+          <p style="color:var(--text-muted);font-size:var(--fs-lg)">Bengaluru, Karnataka, India</p>
+          <p style="color:var(--text-muted);font-size:var(--fs-sm)">LearnVerse HQ</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="nav-logo"><span>🎓</span> LearnVerse</a>
+          <p>Empowering learners worldwide with high-quality, accessible education.</p>
+        </div>
+        <div>
+          <h4>Quick Links</h4>
+          <ul class="footer-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="courses.html">Courses</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Categories</h4>
+          <ul class="footer-links">
+            <li><a href="courses.html">Web Development</a></li>
+            <li><a href="courses.html">Programming</a></li>
+            <li><a href="courses.html">AI</a></li>
+            <li><a href="courses.html">Data Science</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Support</h4>
+          <ul class="footer-links">
+            <li><a href="contact.html">Help Center</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 LearnVerse. All rights reserved.</span>
+        <div class="footer-social">
+          <a href="#">𝕏</a><a href="#">in</a><a href="#">⌨</a><a href="#">▶</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/script.js"></script>
+  <script>
+    function handleContact(e) {
+      e.preventDefault();
+      const name = document.getElementById("contact-name");
+      const email = document.getElementById("contact-email");
+      const subject = document.getElementById("contact-subject");
+      const message = document.getElementById("contact-message");
+
+      let valid = true;
+      valid = UI.validateField(name, name.value.trim().length >= 1, "Name is required") && valid;
+      valid = UI.validateField(email, UI.validateEmail(email.value), "Valid email is required") && valid;
+      valid = UI.validateField(subject, subject.value.trim().length >= 1, "Subject is required") && valid;
+      valid = UI.validateField(message, message.value.trim().length >= 10, "Message must be at least 10 characters") && valid;
+
+      if (!valid) return false;
+
+      UI.showToast("Message sent successfully! We'll get back to you soon.", "success");
+      e.target.reset();
+      return false;
+    }
+  </script>
+</body>
+</html>

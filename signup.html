@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Create your free LearnVerse account and start learning today.">
+  <title>Sign Up — LearnVerse</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo"><span>🎓</span> LearnVerse</a>
+      <div class="nav-links" id="nav-links">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="courses.html" class="nav-link">Courses</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+      </div>
+      <div class="nav-actions">
+        <button class="theme-toggle" id="theme-toggle-btn" onclick="Theme.toggle()" aria-label="Toggle dark mode">🌙</button>
+        <div id="nav-auth-btns"></div>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Signup Form -->
+  <div class="auth-page">
+    <div class="auth-card">
+      <h1>Create Account</h1>
+      <p class="auth-subtitle">Join 50,000+ learners on LearnVerse</p>
+
+      <form id="signup-form" onsubmit="return handleSignup(event)">
+        <div class="form-group">
+          <label class="form-label" for="signup-name">Full Name</label>
+          <input class="form-input" type="text" id="signup-name" placeholder="John Doe" required>
+          <p class="form-error">Name must be at least 2 characters</p>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="signup-email">Email Address</label>
+          <input class="form-input" type="email" id="signup-email" placeholder="you@example.com" required>
+          <p class="form-error">Please enter a valid email address</p>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="signup-password">Password</label>
+          <input class="form-input" type="password" id="signup-password" placeholder="Minimum 6 characters" required>
+          <p class="form-error">Password must be at least 6 characters</p>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="signup-confirm">Confirm Password</label>
+          <input class="form-input" type="password" id="signup-confirm" placeholder="Re-enter your password" required>
+          <p class="form-error">Passwords do not match</p>
+        </div>
+        <div style="margin-bottom:var(--space-6)">
+          <label style="display:flex;align-items:start;gap:var(--space-2);font-size:var(--fs-sm);color:var(--text-secondary);cursor:pointer">
+            <input type="checkbox" id="signup-terms" style="accent-color:var(--primary-500);margin-top:3px">
+            <span>I agree to the <a href="#" style="color:var(--primary-400)">Terms of Service</a> and <a href="#" style="color:var(--primary-400)">Privacy Policy</a></span>
+          </label>
+        </div>
+        <button type="submit" class="btn btn-primary btn-lg" style="width:100%">Create Account →</button>
+      </form>
+
+      <p class="auth-footer">Already have an account? <a href="login.html">Login here</a></p>
+    </div>
+  </div>
+
+  <script src="js/script.js"></script>
+  <script>
+    if (Auth.getCurrentUser()) window.location.href = "dashboard.html";
+
+    function handleSignup(e) {
+      e.preventDefault();
+      const name = document.getElementById("signup-name");
+      const email = document.getElementById("signup-email");
+      const password = document.getElementById("signup-password");
+      const confirm = document.getElementById("signup-confirm");
+      const terms = document.getElementById("signup-terms");
+
+      let valid = true;
+      valid = UI.validateField(name, name.value.trim().length >= 2, "Name must be at least 2 characters") && valid;
+      valid = UI.validateField(email, UI.validateEmail(email.value), "Please enter a valid email address") && valid;
+      valid = UI.validateField(password, password.value.length >= 6, "Password must be at least 6 characters") && valid;
+      valid = UI.validateField(confirm, confirm.value === password.value, "Passwords do not match") && valid;
+
+      if (!terms.checked) {
+        UI.showToast("Please agree to the Terms of Service", "error");
+        return false;
+      }
+      if (!valid) return false;
+
+      const result = Auth.signup(name.value.trim(), email.value, password.value);
+      if (result.success) {
+        UI.showToast("Account created! Redirecting to dashboard...", "success");
+        setTimeout(() => window.location.href = "dashboard.html", 1000);
+      } else {
+        UI.showToast(result.message, "error");
+      }
+      return false;
+    }
+  </script>
+</body>
+</html>

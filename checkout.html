@@ -1,0 +1,288 @@
+s<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Checkout - LearnVerse">
+  <title>Checkout — LearnVerse</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    .checkout-page {
+      padding-top: calc(var(--nav-height) + var(--space-10));
+      min-height: 100vh;
+      background: var(--bg-primary);
+    }
+    .checkout-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.5fr;
+      gap: var(--space-8);
+      align-items: start;
+    }
+    @media (max-width: 900px) {
+      .checkout-grid { grid-template-columns: 1fr; }
+      .order-summary { order: -1; } /* Show summary first on mobile */
+    }
+    
+    .checkout-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-xl);
+      padding: var(--space-8);
+      box-shadow: var(--shadow-sm);
+    }
+    
+    /* Order Summary specific */
+    .summary-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: var(--space-3);
+      padding-bottom: var(--space-3);
+      border-bottom: 1px dashed var(--border-color);
+    }
+    .summary-total {
+      display: flex;
+      justify-content: space-between;
+      margin-top: var(--space-6);
+      padding-top: var(--space-4);
+      border-top: 2px solid var(--border-color);
+      font-size: var(--fs-xl);
+      font-weight: 800;
+    }
+    .course-mini-preview {
+      display: flex;
+      gap: var(--space-4);
+      margin-bottom: var(--space-6);
+    }
+    .course-mini-img {
+      width: 80px;
+      height: 60px;
+      background: var(--gradient-primary);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 1.5rem;
+      flex-shrink: 0;
+    }
+    
+    /* Payment Form */
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-4);
+    }
+    .payment-icons {
+      display: flex;
+      gap: var(--space-2);
+      margin-bottom: var(--space-6);
+    }
+    .payment-icon {
+      padding: var(--space-2) var(--space-4);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      font-size: var(--fs-xl);
+      background: var(--bg-primary);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo"><span>🎓</span> LearnVerse</a>
+      <div class="nav-links" id="nav-links">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="courses.html" class="nav-link">Courses</a>
+      </div>
+      <div class="nav-actions">
+        <button class="theme-toggle" id="theme-toggle-btn" onclick="Theme.toggle()" aria-label="Toggle dark mode">🌙</button>
+        <div id="nav-auth-btns">
+          <a href="login.html" class="btn btn-ghost">Login</a>
+        </div>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Checkout Section -->
+  <div class="checkout-page">
+    <div class="container">
+      <h1 style="font-size: var(--fs-3xl); margin-bottom: var(--space-8);">Secure Checkout</h1>
+      
+      <div class="checkout-grid">
+        
+        <!-- Payment Details Form -->
+        <div class="checkout-card">
+          <h2 style="font-size: var(--fs-xl); margin-bottom: var(--space-6);">Payment Details</h2>
+          <div class="payment-icons">
+            <div class="payment-icon">💳</div>
+            <div class="payment-icon">🌐</div>
+          </div>
+          
+          <form id="checkoutForm">
+            <div class="form-group">
+              <label class="form-label" for="cardName">Name on Card</label>
+              <input type="text" id="cardName" class="form-input" placeholder="John Doe" required>
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label" for="cardNumber">Card Number</label>
+              <input type="text" id="cardNumber" class="form-input" placeholder="0000 0000 0000 0000" maxlength="19" required>
+            </div>
+            
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="expiry">Expiry Date</label>
+                <input type="text" id="expiry" class="form-input" placeholder="MM/YY" maxlength="5" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="cvv">CVV</label>
+                <input type="text" id="cvv" class="form-input" placeholder="123" maxlength="4" required>
+              </div>
+            </div>
+
+            <div class="form-group" style="margin-top: var(--space-6);">
+              <label style="display: flex; align-items: center; gap: var(--space-2); cursor: pointer; font-size: var(--fs-sm);">
+                <input type="checkbox" required>
+                <span>I agree to the <a href="#" style="color: var(--primary-500);">Terms of Service</a> and <a href="#" style="color: var(--primary-500);">Privacy Policy</a>.</span>
+              </label>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-lg" style="width: 100%; margin-top: var(--space-4);" id="checkoutBtn">
+              Complete Payment 🔒
+            </button>
+          </form>
+        </div>
+
+        <!-- Order Summary -->
+        <div class="checkout-card order-summary">
+          <h2 style="font-size: var(--fs-xl); margin-bottom: var(--space-6);">Order Summary</h2>
+          
+          <div id="checkout-course-details">
+            <!-- Dynamic Content Injected Here -->
+            <div class="course-mini-preview">
+              <div class="course-mini-img">💻</div>
+              <div>
+                <h3 style="font-size: var(--fs-base); margin-bottom: var(--space-1);">Loading Course...</h3>
+                <p style="font-size: var(--fs-sm); color: var(--text-muted);">Instructor</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="summary-item">
+            <span style="color: var(--text-secondary);">Original Price</span>
+            <span id="summary-price">$0.00</span>
+          </div>
+          <div class="summary-item">
+            <span style="color: var(--text-secondary);">Discount</span>
+            <span style="color: var(--success);">-$0.00</span>
+          </div>
+          <div class="summary-item">
+            <span style="color: var(--text-secondary);">Tax</span>
+            <span>$0.00</span>
+          </div>
+          
+          <div class="summary-total">
+            <span>Total</span>
+            <span class="gradient-text" id="summary-total">$0.00</span>
+          </div>
+          
+          <div style="margin-top: var(--space-6); text-align: center; font-size: var(--fs-xs); color: var(--text-muted);">
+            <p>🔒 Secure 256-bit SSL encryption.</p>
+            <p>30-Day Money-Back Guarantee.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Success Toast Container -->
+  <div id="toast-container" style="position: fixed; bottom: 20px; right: 20px; z-index: 1000;"></div>
+
+  <script src="js/script.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      Auth.updateNav();
+      
+      // Get course ID from URL query param
+      const urlParams = new URLSearchParams(window.location.search);
+      const courseId = parseInt(urlParams.get('id'));
+      
+      const course = COURSES.find(c => c.id === courseId);
+      
+      if (course) {
+        // Update Summary UI
+        document.getElementById("checkout-course-details").innerHTML = `
+          <div class="course-mini-preview">
+            <div class="course-mini-img">${course.icon || '📚'}</div>
+            <div>
+              <h3 style="font-size: var(--fs-base); margin-bottom: var(--space-1);">${course.title}</h3>
+              <p style="font-size: var(--fs-sm); color: var(--text-muted);">${course.instructor}</p>
+            </div>
+          </div>
+        `;
+        document.getElementById("summary-price").textContent = `$${course.price}`;
+        document.getElementById("summary-total").textContent = `$${course.price}`;
+      } else {
+        // Fallback or redirect if no valid course ID
+        document.getElementById("checkout-course-details").innerHTML = `<p style="color:var(--error);">No course selected. Please return to the courses page.</p>`;
+        document.getElementById("checkoutBtn").disabled = true;
+      }
+
+      // Simple form submission handler
+      document.getElementById("checkoutForm").addEventListener("submit", (e) => {
+        e.preventDefault();
+        
+        if (!Auth.getUser()) {
+          UI.showToast("Please login or sign up to complete enrollment.", "error");
+          setTimeout(() => {
+            window.location.href = `login.html?redirect=checkout.html?id=${courseId}`;
+          }, 2000);
+          return;
+        }
+
+        const btn = document.getElementById("checkoutBtn");
+        btn.innerHTML = `Processing... <span style="font-size:0.8rem">⏳</span>`;
+        btn.disabled = true;
+
+        // Simulate network request
+        setTimeout(() => {
+          // Enroll user
+          if (course) {
+            State.enrollCourse(course);
+          }
+          
+          UI.showToast("Payment Successful! Enrolling you in the course...", "success");
+          
+          setTimeout(() => {
+            window.location.href = "dashboard.html";
+          }, 2000);
+        }, 1500);
+      });
+
+      // Format card number dynamically
+      const cardInput = document.getElementById("cardNumber");
+      cardInput.addEventListener("input", (e) => {
+        let val = e.target.value.replace(/\D/g, '');
+        val = val.replace(/(.{4})/g, '$1 ').trim();
+        e.target.value = val;
+      });
+
+      // Format expiry date
+      const expiryInput = document.getElementById("expiry");
+      expiryInput.addEventListener("input", (e) => {
+        let val = e.target.value.replace(/\D/g, '');
+        if (val.length >= 2) {
+          val = val.substring(0,2) + '/' + val.substring(2);
+        }
+        e.target.value = val;
+      });
+    });
+  </script>
+</body>
+</html>

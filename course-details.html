@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="View course details, curriculum, and instructor info on LearnVerse.">
+  <title>Course Details — LearnVerse</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo"><span>🎓</span> LearnVerse</a>
+      <div class="nav-links" id="nav-links">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="courses.html" class="nav-link">Courses</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+      </div>
+      <div class="nav-actions">
+        <button class="theme-toggle" id="theme-toggle-btn" onclick="Theme.toggle()" aria-label="Toggle dark mode">🌙</button>
+        <div id="nav-auth-btns"></div>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="course-detail-page">
+    <!-- Course Hero -->
+    <div class="course-detail-hero">
+      <div class="container">
+        <a href="courses.html" style="color:rgba(255,255,255,0.6);font-size:var(--fs-sm);display:inline-flex;align-items:center;gap:var(--space-2);margin-bottom:var(--space-6)">← Back to Courses</a>
+        <span id="detail-category" class="card-category" style="display:inline-block;margin-bottom:var(--space-4)"></span>
+        <h1 id="detail-title"></h1>
+        <div class="course-detail-meta">
+          <span>👨‍🏫 <span id="detail-instructor"></span></span>
+          <span>⭐ <span id="detail-rating"></span></span>
+          <span>👥 <span id="detail-students"></span> students</span>
+          <span>⏱ <span id="detail-duration"></span></span>
+          <span>📊 <span id="detail-level"></span></span>
+        </div>
+        <div style="display:flex;align-items:center;gap:var(--space-6);flex-wrap:wrap">
+          <div>
+            <span class="course-detail-price" id="detail-price"></span>
+            <span id="detail-original-price" style="text-decoration:line-through;color:rgba(255,255,255,0.4);margin-left:var(--space-2);font-size:var(--fs-lg)"></span>
+          </div>
+          <button class="btn btn-primary btn-lg" id="enroll-btn" onclick="handleEnroll()">Enroll Now</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Course Content -->
+    <div class="container" style="padding-top:var(--space-4);padding-bottom:var(--space-16)">
+      <div style="display:grid;grid-template-columns:1fr 360px;gap:var(--space-10);align-items:start">
+        <div>
+          <!-- Tabs -->
+          <div class="course-tabs">
+            <button class="course-tab active" data-tab="overview">Overview</button>
+            <button class="course-tab" data-tab="curriculum">Curriculum</button>
+            <button class="course-tab" data-tab="instructor">Instructor</button>
+            <button class="course-tab" data-tab="reviews">Reviews</button>
+          </div>
+
+          <!-- Overview Tab -->
+          <div class="tab-content active" id="tab-overview">
+            <h2 style="margin-bottom:var(--space-4)">About This Course</h2>
+            <p id="detail-description" style="color:var(--text-secondary);line-height:1.8;margin-bottom:var(--space-8)"></p>
+            <h3 style="margin-bottom:var(--space-4)">What You'll Learn</h3>
+            <div class="grid grid-2" id="detail-learnings" style="gap:var(--space-3)"></div>
+          </div>
+
+          <!-- Curriculum Tab -->
+          <div class="tab-content" id="tab-curriculum">
+            <h2 style="margin-bottom:var(--space-6)">Course Curriculum</h2>
+            <div id="detail-modules"></div>
+          </div>
+
+          <!-- Instructor Tab -->
+          <div class="tab-content" id="tab-instructor">
+            <h2 style="margin-bottom:var(--space-6)">Your Instructor</h2>
+            <div style="display:flex;gap:var(--space-6);align-items:start">
+              <div class="testimonial-avatar" style="width:80px;height:80px;font-size:var(--fs-3xl);flex-shrink:0" id="instructor-avatar"></div>
+              <div>
+                <h3 id="instructor-name" style="margin-bottom:var(--space-2)"></h3>
+                <p style="color:var(--text-secondary);line-height:1.8">Expert instructor with years of industry experience and a passion for teaching. Known for delivering complex concepts in an easy-to-understand manner with practical, hands-on examples that prepare students for real-world challenges.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Reviews Tab -->
+          <div class="tab-content" id="tab-reviews">
+            <h2 style="margin-bottom:var(--space-6)">Student Reviews</h2>
+            <div class="grid" style="gap:var(--space-4)" id="detail-reviews"></div>
+          </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="course-sidebar">
+          <div style="text-align:center;font-size:4rem;padding:var(--space-6);border-radius:var(--radius-md);margin-bottom:var(--space-4)" id="sidebar-emoji"></div>
+          <div class="sidebar-features">
+            <div class="sidebar-feature"><span>⏱</span> <span id="sidebar-duration"></span> of content</div>
+            <div class="sidebar-feature"><span>📊</span> <span id="sidebar-level"></span> level</div>
+            <div class="sidebar-feature"><span>📱</span> Access on mobile and TV</div>
+            <div class="sidebar-feature"><span>🏆</span> Certificate of completion</div>
+            <div class="sidebar-feature"><span>♾️</span> Full lifetime access</div>
+            <div class="sidebar-feature"><span>📝</span> Downloadable resources</div>
+          </div>
+          <button class="btn btn-primary btn-lg" style="width:100%" onclick="handleEnroll()" id="sidebar-enroll-btn">Enroll Now</button>
+        </div>
+      </div>
+
+      <!-- Related Courses -->
+      <div style="margin-top:var(--space-16)">
+        <h2 style="margin-bottom:var(--space-6)">Related Courses</h2>
+        <div class="grid grid-3" id="related-courses"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom" style="border-top:none;padding-top:0">
+        <span>© 2026 LearnVerse. All rights reserved.</span>
+        <div class="footer-social">
+          <a href="#">𝕏</a><a href="#">in</a><a href="#">⌨</a><a href="#">▶</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/script.js"></script>
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const courseId = parseInt(params.get("id")) || 1;
+    const course = COURSES.find(c => c.id === courseId) || COURSES[0];
+
+    // Populate details
+    document.title = `${course.title} — LearnVerse`;
+    document.getElementById("detail-title").textContent = course.title;
+    document.getElementById("detail-category").textContent = course.category;
+    document.getElementById("detail-instructor").textContent = course.instructor;
+    document.getElementById("detail-rating").textContent = `${course.rating} (${course.students.toLocaleString()} ratings)`;
+    document.getElementById("detail-students").textContent = course.students.toLocaleString();
+    document.getElementById("detail-duration").textContent = course.duration;
+    document.getElementById("detail-level").textContent = course.level;
+    document.getElementById("detail-price").textContent = `₹${course.price.toLocaleString()}`;
+    document.getElementById("detail-original-price").textContent = `₹${course.originalPrice.toLocaleString()}`;
+    document.getElementById("detail-description").textContent = course.description;
+    document.getElementById("sidebar-emoji").textContent = course.emoji;
+    document.getElementById("sidebar-duration").textContent = course.duration;
+    document.getElementById("sidebar-level").textContent = course.level;
+    document.getElementById("instructor-name").textContent = course.instructor;
+    document.getElementById("instructor-avatar").textContent = course.instructor[0];
+
+    // Learnings
+    const learnings = [
+      "Build real-world projects from scratch",
+      "Understand core concepts deeply",
+      "Industry best practices and patterns",
+      "Problem-solving and debugging skills",
+      "Portfolio-ready projects",
+      "Job-ready practical skills"
+    ];
+    document.getElementById("detail-learnings").innerHTML = learnings.map(l =>
+      `<div style="display:flex;align-items:start;gap:var(--space-2)"><span style="color:var(--success)">✓</span><span style="color:var(--text-secondary);font-size:var(--fs-sm)">${l}</span></div>`
+    ).join("");
+
+    // Modules
+    const totalLessons = course.modules.reduce((a, m) => a + m.lessons, 0);
+    document.getElementById("detail-modules").innerHTML =
+      `<p style="color:var(--text-muted);margin-bottom:var(--space-6)">${course.modules.length} sections • ${totalLessons} lessons • ${course.duration} total</p>` +
+      course.modules.map((m, i) => `
+        <div class="module-item">
+          <div>
+            <span style="color:var(--text-muted);margin-right:var(--space-3)">0${i+1}</span>
+            <span class="module-title">${m.title}</span>
+          </div>
+          <div>
+            <span class="module-duration">${m.lessons} lessons • ${m.duration}</span>
+          </div>
+        </div>
+      `).join("");
+
+    // Reviews
+    const reviews = [
+      { name: "Ankit R.", rating: 5, text: "Excellent course! The instructor explains everything clearly and the projects are very practical.", time: "2 weeks ago" },
+      { name: "Sara K.", rating: 5, text: "One of the best courses I've taken. Well-structured content and great community support.", time: "1 month ago" },
+      { name: "James L.", rating: 4, text: "Very comprehensive. Could use a few more advanced examples, but overall fantastic.", time: "2 months ago" }
+    ];
+    document.getElementById("detail-reviews").innerHTML = reviews.map(r => `
+      <div class="testimonial-card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--space-3)">
+          <div class="testimonial-author">
+            <div class="testimonial-avatar" style="width:36px;height:36px;font-size:var(--fs-sm)">${r.name[0]}</div>
+            <div><div class="testimonial-name">${r.name}</div></div>
+          </div>
+          <span style="font-size:var(--fs-xs);color:var(--text-muted)">${r.time}</span>
+        </div>
+        <div class="testimonial-stars" style="font-size:var(--fs-sm)">${"⭐".repeat(r.rating)}</div>
+        <p style="color:var(--text-secondary);font-size:var(--fs-sm);line-height:1.7">${r.text}</p>
+      </div>
+    `).join("");
+
+    // Related courses
+    const related = COURSES.filter(c => c.category === course.category && c.id !== course.id).slice(0, 3);
+    document.getElementById("related-courses").innerHTML = related.map(c => UI.renderCourseCard(c)).join("");
+
+    // Tabs
+    document.querySelectorAll(".course-tab").forEach(tab => {
+      tab.addEventListener("click", () => {
+        document.querySelectorAll(".course-tab").forEach(t => t.classList.remove("active"));
+        document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
+        tab.classList.add("active");
+        document.getElementById(`tab-${tab.dataset.tab}`).classList.add("active");
+      });
+    });
+
+    // Enroll
+    function handleEnroll() {
+      const user = Auth.getCurrentUser();
+      if (!user) {
+        UI.showToast("Please login to enroll in this course.", "error");
+        setTimeout(() => window.location.href = "login.html", 1500);
+        return;
+      }
+      const result = Auth.enrollCourse(course.id);
+      if (result.success) {
+        UI.showToast("Successfully enrolled! Check your dashboard.", "success");
+        updateEnrollBtn();
+      } else {
+        UI.showToast(result.message, "info");
+      }
+    }
+
+    function updateEnrollBtn() {
+      if (Auth.isEnrolled(course.id)) {
+        document.getElementById("enroll-btn").textContent = "✓ Enrolled";
+        document.getElementById("enroll-btn").disabled = true;
+        document.getElementById("enroll-btn").style.opacity = "0.7";
+        document.getElementById("sidebar-enroll-btn").textContent = "✓ Enrolled";
+        document.getElementById("sidebar-enroll-btn").disabled = true;
+        document.getElementById("sidebar-enroll-btn").style.opacity = "0.7";
+      }
+    }
+    updateEnrollBtn();
+  </script>
+</body>
+</html>
